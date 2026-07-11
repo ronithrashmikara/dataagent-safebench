@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+title: "DataAgent-SafeBench: Evaluating Authority Confusion and Prompt Injection in AI Data Agents"
+message: "Please cite the JASPER 2026 manuscript when using this work."
+type: software
+authors:
+  - family-names: "Rashmikara"
+    given-names: "R"
+  - family-names: "Jayathilake"
+    given-names: "M"
+year: 2026
+version: 1.0.0-pilot
+license: LicenseRef-Proprietary

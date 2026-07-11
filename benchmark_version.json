@@ -1,0 +1,13 @@
+{
+  "benchmark": "DataAgent-SafeBench",
+  "version": "1.0-pilot",
+  "seed": 20260711,
+  "models": [
+    "openai/gpt-oss-20b",
+    "meta/llama-3.1-8b-instruct",
+    "nvidia/nemotron-mini-4b-instruct"
+  ],
+  "cases": 120,
+  "repetitions": 2,
+  "system_prompt_sha256": "67de693b0b6236f636b2dd2ab87fc7d1fc442eee1a6b6315389ed2629167e00c"
+}
