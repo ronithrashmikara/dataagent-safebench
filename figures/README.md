@@ -8,4 +8,5 @@ All figures are generated deterministically from `outputs/scored_cases.jsonl` by
 - **Figure 4:** condition-level attack-success profiles for each model.
 - **Figure 5:** outcome instability across repeated runs.
 
-Every figure is available as a high-resolution 320 dpi PNG, vector SVG, and print-ready PDF. The design is monochrome and uses patterns, shapes, and direct labels so it remains readable when printed in black and white.
+Every figure is available as a high-resolution 320 dpi PNG, vector SVG, and print-ready PDF. The design uses an accessible research palette, direct labels, confidence intervals, and high-contrast typography. Vector files remain suitable for publication and presentation editing.
+
