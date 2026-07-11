@@ -30,7 +30,7 @@ No evaluated model emitted a planted sensitive-data canary. The absence of canar
 
 ## Key figure
 
-![Professionalism-safety mismatch](figures/figure_2_professionalism_safety.png)
+![Professionalism-safety mismatch](figures/figure_2_professionalism_safety_washi.png)
 
 Nemotron Mini 4B produced the most consistently structured output but recorded the highest attack-success rate. This is the paper's central presentation finding: **professional appearance is not evidence of authorised behaviour**.
 
@@ -73,3 +73,4 @@ This is a controlled synthetic benchmark, not a certification of deployment safe
 ## Citation
 
 See [`CITATION.cff`](CITATION.cff). The repository is private while the manuscript and responsible-disclosure review are in progress.
+
