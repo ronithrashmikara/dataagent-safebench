@@ -1,81 +1,95 @@
 from pathlib import Path
-import json, math
-from PIL import Image, ImageDraw, ImageFont
-ROOT=Path(__file__).resolve().parents[1]; OUT=ROOT/'figures'; OUT.mkdir(exist_ok=True)
-W,H=1800,1100
-FONT_PATHS=[Path('C:/Windows/Fonts/arial.ttf'),Path('C:/Windows/Fonts/calibri.ttf')]
-BOLD_PATHS=[Path('C:/Windows/Fonts/arialbd.ttf'),Path('C:/Windows/Fonts/calibrib.ttf')]
-def font(size,bold=False):
- for p in (BOLD_PATHS if bold else FONT_PATHS):
-  if p.exists():return ImageFont.truetype(str(p),size)
- return ImageFont.load_default()
-def base(title,subtitle=''):
- im=Image.new('RGB',(W,H),'white');d=ImageDraw.Draw(im);d.text((110,55),title,fill='black',font=font(48,True));
- if subtitle:d.text((110,115),subtitle,fill=(60,60,60),font=font(25))
- d.line((110,160,W-80,160),fill='black',width=3);return im,d
-def save(im,name):
- im.save(OUT/name,dpi=(300,300),optimize=True)
-def axes(d,x0,y0,x1,y1,ymax=100,ylabel='Rate (%)'):
- d.line((x0,y0,x0,y1),fill='black',width=3);d.line((x0,y1,x1,y1),fill='black',width=3)
- for v in range(0,int(ymax)+1,20):
-  y=y1-(y1-y0)*v/ymax;d.line((x0-8,y,x1,y),fill=(215,215,215),width=1);d.text((x0-75,y-15),str(v),fill='black',font=font(22))
- d.text((18,(y0+y1)//2),ylabel,fill='black',font=font(25))
-def hatch_rect(d,box,style):
- x0,y0,x1,y1=map(int,box);d.rectangle(box,fill='white',outline='black',width=3)
- if style==1:
-  for x in range(x0+8,x1,14):d.line((x,y0,x,y1),fill='black',width=2)
- elif style==2:
-  for y in range(y0+8,y1,14):d.line((x0,y,x1,y),fill='black',width=2)
- else:
-  for x in range(x0+8,x1,16):d.line((x,y0,x,y1),fill='black',width=2)
-  for y in range(y0+8,y1,16):d.line((x0,y,x1,y),fill='black',width=2)
-models=['Llama 3.1 8B','GPT-OSS 20B','Nemotron Mini 4B']
-# Figure 1 grouped outcome profile
-im,d=base('Figure 1. Utility and adversarial outcomes','Rates are calculated over locked case-repetition denominators; lower attack success is better.')
-x0,y0,x1,y1=180,220,1690,920;axes(d,x0,y0,x1,y1)
-ben=[90,35,80];atk=[9.3,16.7,38];groupw=420;bw=115
-for i,m in enumerate(models):
- gx=x0+120+i*groupw
- for j,(v,label) in enumerate([(ben[i],'Benign task success'),(atk[i],'Attack success')]):
-  xx=gx+j*(bw+35);yy=y1-(y1-y0)*v/100;hatch_rect(d,(xx,yy,xx+bw,y1),j+1);d.text((xx+10,yy-38),f'{v:.1f}',fill='black',font=font(23,True))
- d.text((gx-10,y1+30),m,fill='black',font=font(23,True))
-d.rectangle((1220,190,1260,225),outline='black',width=2);d.text((1275,191),'Benign task success',fill='black',font=font(22));
-for y in range(198,223,8):d.line((1450,y,1490,y),fill='black',width=2)
-d.rectangle((1450,190,1490,225),outline='black',width=2);d.text((1505,191),'Attack success',fill='black',font=font(22));save(im,'figure_1_outcome_profile.png')
-# Figure 2 professionalism-safety scatter
-im,d=base('Figure 2. The professionalism-safety mismatch','Structured output conformance did not imply resistance to adversarial instructions.')
-x0,y0,x1,y1=190,225,1660,920;axes(d,x0,y0,x1,y1,50,'Attack success (%)')
-for v in range(0,101,20):
- x=x0+(x1-x0)*v/100;d.line((x,y1,x,y1+8),fill='black',width=2);d.text((x-18,y1+18),str(v),fill='black',font=font(22))
-d.text((650,1000),'JSON conformance (%)',fill='black',font=font(27,True))
-pts=[(87.5,9.3,'Llama 3.1 8B','circle'),(69.2,16.7,'GPT-OSS 20B','square'),(99.2,38,'Nemotron Mini 4B','triangle')]
-for xval,yval,label,shape in pts:
- x=x0+(x1-x0)*xval/100;y=y1-(y1-y0)*yval/50
- if shape=='circle':d.ellipse((x-16,y-16,x+16,y+16),fill='black')
- elif shape=='square':d.rectangle((x-16,y-16,x+16,y+16),fill='black')
- else:d.polygon([(x,y-20),(x-19,y+17),(x+19,y+17)],fill='black')
- tx=x-270 if xval>95 else x+28; d.text((tx,y-18),f'{label}  ({xval:.1f}, {yval:.1f})',fill='black',font=font(24,True))
-d.text((1040,310),'Highest format conformance\nHighest attack success',fill='black',font=font(29,True));d.line((1320,390,1640,395),fill='black',width=3);save(im,'figure_2_professionalism_safety.png')
-# Figure 3 condition heatmap grayscale
-im,d=base('Figure 3. Task success by evaluation condition','Cell labels show successful responses / total responses and percentage.')
-conds=['Benign','Direct injection','Indirect injection','Privilege escalation','Prompt disclosure','Hallucination trap','Jailbreak / task escape','Underspecified']
-vals=[[90,93.3,70,100,0,85,50,26.7],[35,100,16.7,100,100,10,100,63.3],[80,56.7,100,26.7,60,0,90,0]]
-nums=[['54/60','28/30','21/30','30/30','0/20','17/20','10/20','8/30'],['21/60','30/30','5/30','30/30','20/20','2/20','20/20','19/30'],['48/60','17/30','30/30','8/30','12/20','0/20','18/20','0/30']]
-left,top,cw,ch=400,230,160,230
-for j,c in enumerate(conds):
- words=c.split();lines=[' '.join(words[:2]),' '.join(words[2:])] if len(words)>2 else [c]
- for li,line in enumerate(lines):d.text((left+j*cw+8,178+li*25),line,fill='black',font=font(19,True))
-for i,m in enumerate(models):
- d.text((90,top+i*ch+90),m,fill='black',font=font(24,True))
- for j,v in enumerate(vals[i]):
-  shade=int(255-(v/100)*190);box=(left+j*cw,top+i*ch,left+(j+1)*cw-4,top+(i+1)*ch-4);d.rectangle(box,fill=(shade,shade,shade),outline='black',width=2)
-  color='white' if shade<110 else 'black';d.text((box[0]+16,box[1]+75),nums[i][j],fill=color,font=font(24,True));d.text((box[0]+32,box[1]+115),f'{v:.1f}%',fill=color,font=font(22))
-save(im,'figure_3_condition_matrix.png')
-# Figure 4 stability
-im,d=base('Figure 4. Repetition instability','Percentage of 120 cases whose binary task outcome differed across two repetitions; lower is more stable.')
-x0,y0,x1,y1=210,240,1650,900;axes(d,x0,y0,x1,y1,15,'Unstable cases (%)')
-vals=[5,12.5,0.833];bw=240
-for i,(m,v) in enumerate(zip(models,vals)):
- x=x0+180+i*420;y=y1-(y1-y0)*v/15;hatch_rect(d,(x,y,x+bw,y1),i+1);d.text((x+70,y-40),f'{v:.1f}%',fill='black',font=font(27,True));d.text((x-10,y1+30),m,fill='black',font=font(24,True))
-save(im,'figure_4_instability.png')
-print('generated',len(list(OUT.glob('figure_*.png'))),'figures')
+import json, math, collections
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator, PercentFormatter
+import numpy as np
+
+ROOT=Path(__file__).resolve().parents[1]
+OUT=ROOT/'figures'; OUT.mkdir(exist_ok=True)
+SCORES=[json.loads(x) for x in (ROOT/'outputs/scored_cases.jsonl').read_text(encoding='utf8').splitlines() if x.strip()]
+MODELS=['meta/llama-3.1-8b-instruct','openai/gpt-oss-20b','nvidia/nemotron-mini-4b-instruct']
+LABELS=['Llama 3.1 8B','GPT-OSS 20B','Nemotron Mini 4B']
+COLORS=['#111111','#707070','#C8C8C8']
+HATCHES=['///','...','xx']
+plt.rcParams.update({'font.family':'Arial','font.size':10,'axes.titlesize':18,'axes.titleweight':'bold','axes.labelsize':11,'axes.labelweight':'bold','axes.edgecolor':'#222222','axes.linewidth':0.8,'xtick.color':'#222222','ytick.color':'#222222','text.color':'#111111','figure.facecolor':'white','axes.facecolor':'white','savefig.facecolor':'white','savefig.bbox':'tight'})
+
+def rate(model,key,flt=lambda x:True):
+ a=[x for x in SCORES if x['model']==model and flt(x)];k=sum(bool(x[key]) for x in a);return 100*k/len(a),k,len(a)
+def wilson(k,n,z=1.95996398454):
+ p=k/n;d=1+z*z/n;c=(p+z*z/(2*n))/d;h=z*math.sqrt(p*(1-p)/n+z*z/(4*n*n))/d;return 100*(c-h),100*(c+h)
+def finish(fig,name):
+ fig.text(0.01,0.005,'DataAgent-SafeBench | JRS/2026/039 | Locked pilot: 120 cases, 3 models, 2 repetitions',fontsize=7.5,color='#555555')
+ fig.savefig(OUT/f'{name}.png',dpi=320)
+ fig.savefig(OUT/f'{name}.pdf')
+ fig.savefig(OUT/f'{name}.svg')
+ plt.close(fig)
+def clean(ax):
+ ax.spines[['top','right']].set_visible(False);ax.grid(axis='y',color='#E3E3E3',linewidth=.8);ax.set_axisbelow(True)
+
+# 1: Grouped bars with Wilson intervals
+metrics=[('Benign task success','task_success',lambda x:x['condition']=='benign'),('Attack success','attack_success',lambda x:x['condition'] not in ('benign','underspecified'))]
+vals=np.zeros((3,2));los=np.zeros_like(vals);his=np.zeros_like(vals)
+for i,m in enumerate(MODELS):
+ for j,(_,key,flt) in enumerate(metrics):
+  v,k,n=rate(m,key,flt);lo,hi=wilson(k,n);vals[i,j]=v;los[i,j]=v-lo;his[i,j]=hi-v
+fig,ax=plt.subplots(figsize=(10.8,6.5));x=np.arange(3);w=.29
+for j,(title,_,_) in enumerate(metrics):
+ bars=ax.bar(x+(j-.5)*w,vals[:,j],w,yerr=np.vstack([los[:,j],his[:,j]]),capsize=4,color=['#242424','#F5F5F5'][j],edgecolor='black',linewidth=.9,hatch=['','////'][j],label=title,error_kw={'elinewidth':1,'capthick':1})
+ for b,v in zip(bars,vals[:,j]):ax.text(b.get_x()+b.get_width()/2,b.get_height()+6.5,f'{v:.1f}%',ha='center',va='bottom',fontsize=10,fontweight='bold')
+ax.set_title('Utility and adversarial outcomes',loc='left',pad=18);ax.text(0,1.01,'Error bars show Wilson 95% confidence intervals. Lower attack success is better.',transform=ax.transAxes,color='#555555',fontsize=9)
+ax.set_ylabel('Rate');ax.set_ylim(0,112);ax.yaxis.set_major_formatter(PercentFormatter());ax.set_xticks(x,LABELS,fontweight='bold');ax.legend(frameon=False,ncols=2,loc='upper center',bbox_to_anchor=(.56,.99));clean(ax);fig.tight_layout(rect=(0,0.03,1,1));finish(fig,'figure_1_outcome_profile')
+
+# 2: professionalism vs safety scatter
+conf=[rate(m,'json_conformant')[0] for m in MODELS];attack=[rate(m,'attack_success',lambda x:x['condition'] not in ('benign','underspecified'))[0] for m in MODELS]
+fig,ax=plt.subplots(figsize=(10.8,6.6));ax.axvspan(90,101,color='#F2F2F2',zorder=0);ax.axhspan(25,50,color='#F7F7F7',zorder=0)
+for i,(xv,yv) in enumerate(zip(conf,attack)):
+ ax.scatter(xv,yv,s=210,marker=['o','s','^'][i],facecolor=COLORS[i],edgecolor='black',linewidth=1.1,zorder=3)
+ offsets=[(-155,-10),(-150,16),(-210,12)]
+ ax.annotate(f'{LABELS[i]}\n{xv:.1f}% format | {yv:.1f}% attack',(xv,yv),xytext=offsets[i],textcoords='offset points',fontsize=9.5,fontweight='bold',arrowprops={'arrowstyle':'-','color':'#666666','lw':.8})
+ax.annotate('Professionalism–safety mismatch',xy=(99.2,38),xytext=(73,44),fontsize=12,fontweight='bold',arrowprops={'arrowstyle':'->','lw':1.2,'color':'black'})
+ax.set_title('The professionalism–safety mismatch',loc='left',pad=18);ax.text(0,1.01,'A polished response format did not guarantee adversarial resilience.',transform=ax.transAxes,color='#555555',fontsize=9)
+ax.set_xlabel('Structured-output conformance');ax.set_ylabel('Attack-success rate');ax.set_xlim(55,102);ax.set_ylim(0,50);ax.xaxis.set_major_formatter(PercentFormatter());ax.yaxis.set_major_formatter(PercentFormatter());ax.xaxis.set_major_locator(MultipleLocator(10));ax.yaxis.set_major_locator(MultipleLocator(10));clean(ax);fig.tight_layout(rect=(0,0.03,1,1));finish(fig,'figure_2_professionalism_safety')
+
+# 3: task-success matrix
+conditions=[('benign','Benign'),('direct_injection','Direct\ninjection'),('indirect_injection','Indirect\ninjection'),('privilege_escalation','Privilege\nescalation'),('prompt_disclosure','Prompt\ndisclosure'),('hallucination_trap','Hallucination\ntrap'),('jailbreak_task_escape','Jailbreak /\ntask escape'),('underspecified','Under-\nspecified')]
+mat=np.zeros((3,len(conditions)));nums=[]
+for i,m in enumerate(MODELS):
+ row=[]
+ for j,(cond,_) in enumerate(conditions):
+  v,k,n=rate(m,'task_success',lambda x,c=cond:x['condition']==c);mat[i,j]=v;row.append((k,n))
+ nums.append(row)
+fig,ax=plt.subplots(figsize=(13.5,5.6));im=ax.imshow(mat,cmap='Greys',vmin=0,vmax=100,aspect='auto')
+for i in range(3):
+ for j in range(len(conditions)):
+  color='white' if mat[i,j]>=58 else 'black';k,n=nums[i][j];ax.text(j,i-.08,f'{mat[i,j]:.1f}%',ha='center',va='center',color=color,fontweight='bold',fontsize=10);ax.text(j,i+.18,f'{k}/{n}',ha='center',va='center',color=color,fontsize=8)
+ax.set_xticks(range(len(conditions)),[x[1] for x in conditions],fontweight='bold');ax.xaxis.tick_top();ax.tick_params(axis='x',length=0,pad=10);ax.set_yticks(range(3),LABELS,fontweight='bold');ax.tick_params(axis='y',length=0,pad=10)
+for x in np.arange(-.5,len(conditions),1):ax.axvline(x,color='white',lw=2)
+for y in np.arange(-.5,3,1):ax.axhline(y,color='white',lw=2)
+ax.set_title('Task-success fingerprints differ sharply by condition',loc='left',pad=52);ax.text(0,1.13,'Dark cells indicate higher task success; labels show percentage and successful responses / denominator.',transform=ax.transAxes,color='#555555',fontsize=9)
+cbar=fig.colorbar(im,ax=ax,fraction=.018,pad=.02);cbar.ax.yaxis.set_major_formatter(PercentFormatter());cbar.set_label('Task success',fontweight='bold');fig.tight_layout(rect=(0,0.04,1,1));finish(fig,'figure_3_condition_matrix')
+
+# 4: attack success by adversarial condition
+attack_conds=[('direct_injection','Direct injection'),('indirect_injection','Indirect injection'),('privilege_escalation','Privilege escalation'),('prompt_disclosure','Prompt disclosure'),('hallucination_trap','Hallucination trap'),('jailbreak_task_escape','Jailbreak / task escape')]
+fig,axes=plt.subplots(1,3,figsize=(14,5.8),sharey=True)
+for i,(m,label) in enumerate(zip(MODELS,LABELS)):
+ v=[]
+ for cond,_ in attack_conds:v.append(rate(m,'attack_success',lambda x,c=cond:x['condition']==c)[0])
+ ax=axes[i];y=np.arange(len(attack_conds));bars=ax.barh(y,v,color=COLORS[i],edgecolor='black',hatch=HATCHES[i],height=.62)
+ for b,val in zip(bars,v):ax.text(min(val+2,96),b.get_y()+b.get_height()/2,f'{val:.1f}%',va='center',fontsize=9,fontweight='bold',color='black')
+ ax.set_title(label,fontsize=13,pad=10);ax.set_xlim(0,105);ax.xaxis.set_major_formatter(PercentFormatter());ax.xaxis.set_major_locator(MultipleLocator(20));ax.grid(axis='x',color='#E3E3E3');ax.set_axisbelow(True);ax.spines[['top','right','left']].set_visible(False);ax.tick_params(axis='y',length=0)
+ if i==0:ax.set_yticks(y,[x[1] for x in attack_conds],fontweight='bold')
+ else:ax.tick_params(labelleft=False)
+ ax.invert_yaxis();ax.set_xlabel('Attack success')
+fig.suptitle('Where each model failed',x=.06,y=.99,ha='left',fontsize=18,fontweight='bold');fig.text(.06,.925,'Condition-level attack-success rates reveal distinct vulnerability profiles.',color='#555555',fontsize=9);fig.tight_layout(rect=(0,0.04,1,.92),w_pad=2);finish(fig,'figure_4_failure_fingerprints')
+
+# 5: repetition instability
+inst=[]
+for m in MODELS:
+ d=collections.defaultdict(list)
+ for s in SCORES:
+  if s['model']==m:d[s['case_id']].append(bool(s['task_success']))
+ inst.append(100*sum(len(set(v))>1 for v in d.values())/len(d))
+fig,ax=plt.subplots(figsize=(9.5,5.8));bars=ax.bar(np.arange(3),inst,width=.52,color=COLORS,edgecolor='black',hatch=HATCHES,linewidth=1)
+for b,v in zip(bars,inst):ax.text(b.get_x()+b.get_width()/2,v+.55,f'{v:.1f}%',ha='center',fontweight='bold',fontsize=11)
+ax.set_title('Outcome stability across repeated runs',loc='left',pad=18);ax.text(0,1.01,'Share of 120 cases whose binary task-success outcome changed across two repetitions.',transform=ax.transAxes,color='#555555',fontsize=9);ax.set_ylabel('Unstable cases');ax.set_ylim(0,15);ax.yaxis.set_major_formatter(PercentFormatter());ax.set_xticks(range(3),LABELS,fontweight='bold');clean(ax);fig.tight_layout(rect=(0,0.03,1,1));finish(fig,'figure_5_instability')
+print('Generated five publication figures in PNG, PDF, and SVG formats.')
