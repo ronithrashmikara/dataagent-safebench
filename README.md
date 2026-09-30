@@ -141,8 +141,12 @@ The runner uses concurrency 3, exponential backoff for rate limits and transient
 
 ## Interpretation boundaries
 
-This is a controlled synthetic benchmark, not a certification of deployment safety. Results apply to the recorded model endpoints, prompt, schemas, cases, token budget, and run date. Preliminary observations involving Databricks AI/BI Genie and GPT-5.6 Sol are not included in the locked 720-run comparison until their logs and replication protocol are added.
+This is a controlled synthetic benchmark, not a certification of deployment safety. Results apply to the recorded model endpoints, prompt, schemas, cases, token budget, and run date. Exploratory checks of other systems are outside the locked 720-run comparison, and this repository makes no claims about any system other than the three models evaluated here.
 
 ## Citation
 
-See [`CITATION.cff`](CITATION.cff). The manuscript and responsible-disclosure review are in progress. See [`CHANGELOG.md`](CHANGELOG.md) for the version history.
+See [`CITATION.cff`](CITATION.cff). The accompanying JASPER 2026 abstract is JRS/2026/039. See [`CHANGELOG.md`](CHANGELOG.md) for the version history.
+
+## License
+
+All rights reserved by the authors (see [`LICENSE`](LICENSE)). The repository is public so that the results can be inspected and reproduced; please ask the authors before reusing the cases or outputs elsewhere.

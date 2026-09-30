@@ -17,6 +17,8 @@ No inference was re-run. `outputs/raw_responses.jsonl`, `outputs/scored_cases.js
   - reframed the "professionalism-safety mismatch" as a counterexample ("format conformance is not evidence of authorised behaviour");
   - noted that task escape is the thinnest category (10 of 120 cases);
   - removed the incorrect statement that the repository is private.
+  - LICENSE: replaced "This repository is private research material" with an accurate description of the public, all-rights-reserved repository.
+  - README: removed unpublished observations about named third-party systems and the unverified responsible-disclosure status.
 - `run_benchmark.py`: added `--max-tokens` (default 350, the recorded v1.0 value) and `--out-dir` flags for the planned v1.1 re-run. New raw records also store `max_tokens`. v1.0 behaviour is unchanged by default.
 
 ## v1.0 - locked pilot

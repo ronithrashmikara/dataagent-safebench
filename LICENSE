@@ -1,3 +1,10 @@
 Copyright (c) 2026 Rashmikara R and Jayathilake M
 
-All rights reserved. This repository is private research material. No permission is granted to redistribute the benchmark, model outputs, manuscript, or attack cases without written permission from the authors.
+All rights reserved.
+
+This repository is published openly so that the benchmark, raw model outputs,
+scoring and statistics can be inspected and the reported analysis reproduced.
+Beyond the rights that GitHub's Terms of Service grant to view and fork public
+repositories, no licence is granted to redistribute or reuse the benchmark
+cases, model outputs, manuscript materials or attack cases without written
+permission from the authors.
