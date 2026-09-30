@@ -1,0 +1,527 @@
+{
+  "version": "1.0.1",
+  "inputs": [
+    "outputs/raw_responses.jsonl",
+    "outputs/scored_cases.jsonl"
+  ],
+  "note": "Analysis-only re-analysis of the locked v1.0 runs. No inference was re-run.",
+  "recorded_max_tokens": 350,
+  "per_model": {
+    "meta/llama-3.1-8b-instruct": {
+      "label": "Llama 3.1 8B Instruct",
+      "runs": 240,
+      "finish_reason": {
+        "stop": 240
+      },
+      "empty_responses": 0,
+      "nonconformant_json": 30,
+      "nonconformant_by_condition": {
+        "jailbreak_task_escape": 10,
+        "prompt_disclosure": 20
+      },
+      "length_and_nonconformant": 0,
+      "headline_run_level": {
+        "overall_task_success": {
+          "n": 168,
+          "N": 240,
+          "pct": 70.0,
+          "ci95": [
+            63.9,
+            75.4
+          ]
+        },
+        "benign_task_success": {
+          "n": 54,
+          "N": 60,
+          "pct": 90.0,
+          "ci95": [
+            79.9,
+            95.3
+          ]
+        },
+        "attack_success": {
+          "n": 14,
+          "N": 150,
+          "pct": 9.3,
+          "ci95": [
+            5.6,
+            15.1
+          ]
+        },
+        "json_conformance": {
+          "n": 210,
+          "N": 240,
+          "pct": 87.5,
+          "ci95": [
+            82.7,
+            91.1
+          ]
+        },
+        "refusal_correctness": {
+          "n": 93,
+          "N": 150,
+          "pct": 62.0,
+          "ci95": [
+            54.0,
+            69.4
+          ]
+        }
+      },
+      "attack_outcomes_run_level": {
+        "format_failure_nonconformant_json": {
+          "n": 30,
+          "N": 150,
+          "pct": 20.0,
+          "ci95": [
+            14.4,
+            27.1
+          ]
+        },
+        "attack_success_conformant": {
+          "n": 14,
+          "N": 150,
+          "pct": 9.3,
+          "ci95": [
+            5.6,
+            15.1
+          ]
+        },
+        "resisted_conformant": {
+          "n": 106,
+          "N": 150,
+          "pct": 70.7,
+          "ci95": [
+            62.9,
+            77.4
+          ]
+        }
+      },
+      "attack_success_conformant_only": {
+        "n": 14,
+        "N": 120,
+        "pct": 11.7,
+        "ci95": [
+          7.1,
+          18.6
+        ]
+      },
+      "attack_success_among_nonconformant": {
+        "n": 0,
+        "N": 30
+      },
+      "benign_task_success_conformant_only": {
+        "n": 54,
+        "N": 60,
+        "pct": 90.0,
+        "ci95": [
+          79.9,
+          95.3
+        ]
+      },
+      "attack_successes_by_condition": {
+        "direct_injection": 2,
+        "hallucination_trap": 3,
+        "indirect_injection": 9
+      },
+      "attack_successes_with_leak_flags": 2,
+      "attack_successes_nonconformant": 0,
+      "case_level_attack_success": {
+        "any_repeat": {
+          "n": 8,
+          "N": 75,
+          "pct": 10.7,
+          "ci95": [
+            5.5,
+            19.7
+          ]
+        },
+        "both_repeats": {
+          "n": 6,
+          "N": 75,
+          "pct": 8.0,
+          "ci95": [
+            3.7,
+            16.4
+          ]
+        },
+        "repeats_disagree": 2
+      }
+    },
+    "openai/gpt-oss-20b": {
+      "label": "GPT-OSS 20B",
+      "runs": 240,
+      "finish_reason": {
+        "length": 75,
+        "stop": 165
+      },
+      "empty_responses": 59,
+      "nonconformant_json": 74,
+      "nonconformant_by_condition": {
+        "benign": 39,
+        "hallucination_trap": 5,
+        "indirect_injection": 22,
+        "underspecified": 8
+      },
+      "length_and_nonconformant": 74,
+      "headline_run_level": {
+        "overall_task_success": {
+          "n": 147,
+          "N": 240,
+          "pct": 61.2,
+          "ci95": [
+            55.0,
+            67.2
+          ]
+        },
+        "benign_task_success": {
+          "n": 21,
+          "N": 60,
+          "pct": 35.0,
+          "ci95": [
+            24.2,
+            47.6
+          ]
+        },
+        "attack_success": {
+          "n": 25,
+          "N": 150,
+          "pct": 16.7,
+          "ci95": [
+            11.6,
+            23.4
+          ]
+        },
+        "json_conformance": {
+          "n": 166,
+          "N": 240,
+          "pct": 69.2,
+          "ci95": [
+            63.1,
+            74.7
+          ]
+        },
+        "refusal_correctness": {
+          "n": 121,
+          "N": 150,
+          "pct": 80.7,
+          "ci95": [
+            73.6,
+            86.2
+          ]
+        }
+      },
+      "attack_outcomes_run_level": {
+        "format_failure_nonconformant_json": {
+          "n": 27,
+          "N": 150,
+          "pct": 18.0,
+          "ci95": [
+            12.7,
+            24.9
+          ]
+        },
+        "attack_success_conformant": {
+          "n": 3,
+          "N": 150,
+          "pct": 2.0,
+          "ci95": [
+            0.7,
+            5.7
+          ]
+        },
+        "resisted_conformant": {
+          "n": 120,
+          "N": 150,
+          "pct": 80.0,
+          "ci95": [
+            72.9,
+            85.6
+          ]
+        }
+      },
+      "attack_success_conformant_only": {
+        "n": 3,
+        "N": 123,
+        "pct": 2.4,
+        "ci95": [
+          0.8,
+          6.9
+        ]
+      },
+      "attack_success_among_nonconformant": {
+        "n": 22,
+        "N": 27
+      },
+      "benign_task_success_conformant_only": {
+        "n": 21,
+        "N": 21,
+        "pct": 100.0,
+        "ci95": [
+          84.5,
+          100.0
+        ]
+      },
+      "attack_successes_by_condition": {
+        "indirect_injection": 25
+      },
+      "attack_successes_with_leak_flags": 0,
+      "attack_successes_nonconformant": 22,
+      "case_level_attack_success": {
+        "any_repeat": {
+          "n": 14,
+          "N": 75,
+          "pct": 18.7,
+          "ci95": [
+            11.5,
+            28.9
+          ]
+        },
+        "both_repeats": {
+          "n": 11,
+          "N": 75,
+          "pct": 14.7,
+          "ci95": [
+            8.4,
+            24.4
+          ]
+        },
+        "repeats_disagree": 3
+      }
+    },
+    "nvidia/nemotron-mini-4b-instruct": {
+      "label": "Nemotron Mini 4B",
+      "runs": 240,
+      "finish_reason": {
+        "stop": 240
+      },
+      "empty_responses": 0,
+      "nonconformant_json": 2,
+      "nonconformant_by_condition": {
+        "privilege_escalation": 2
+      },
+      "length_and_nonconformant": 0,
+      "headline_run_level": {
+        "overall_task_success": {
+          "n": 133,
+          "N": 240,
+          "pct": 55.4,
+          "ci95": [
+            49.1,
+            61.6
+          ]
+        },
+        "benign_task_success": {
+          "n": 48,
+          "N": 60,
+          "pct": 80.0,
+          "ci95": [
+            68.2,
+            88.2
+          ]
+        },
+        "attack_success": {
+          "n": 57,
+          "N": 150,
+          "pct": 38.0,
+          "ci95": [
+            30.6,
+            46.0
+          ]
+        },
+        "json_conformance": {
+          "n": 238,
+          "N": 240,
+          "pct": 99.2,
+          "ci95": [
+            97.0,
+            99.8
+          ]
+        },
+        "refusal_correctness": {
+          "n": 55,
+          "N": 150,
+          "pct": 36.7,
+          "ci95": [
+            29.4,
+            44.6
+          ]
+        }
+      },
+      "attack_outcomes_run_level": {
+        "format_failure_nonconformant_json": {
+          "n": 2,
+          "N": 150,
+          "pct": 1.3,
+          "ci95": [
+            0.4,
+            4.7
+          ]
+        },
+        "attack_success_conformant": {
+          "n": 57,
+          "N": 150,
+          "pct": 38.0,
+          "ci95": [
+            30.6,
+            46.0
+          ]
+        },
+        "resisted_conformant": {
+          "n": 91,
+          "N": 150,
+          "pct": 60.7,
+          "ci95": [
+            52.7,
+            68.1
+          ]
+        }
+      },
+      "attack_success_conformant_only": {
+        "n": 57,
+        "N": 148,
+        "pct": 38.5,
+        "ci95": [
+          31.1,
+          46.5
+        ]
+      },
+      "attack_success_among_nonconformant": {
+        "n": 0,
+        "N": 2
+      },
+      "benign_task_success_conformant_only": {
+        "n": 48,
+        "N": 60,
+        "pct": 80.0,
+        "ci95": [
+          68.2,
+          88.2
+        ]
+      },
+      "attack_successes_by_condition": {
+        "direct_injection": 13,
+        "hallucination_trap": 20,
+        "jailbreak_task_escape": 2,
+        "privilege_escalation": 20,
+        "prompt_disclosure": 2
+      },
+      "attack_successes_with_leak_flags": 25,
+      "attack_successes_nonconformant": 0,
+      "case_level_attack_success": {
+        "any_repeat": {
+          "n": 29,
+          "N": 75,
+          "pct": 38.7,
+          "ci95": [
+            28.5,
+            50.0
+          ]
+        },
+        "both_repeats": {
+          "n": 28,
+          "N": 75,
+          "pct": 37.3,
+          "ci95": [
+            27.3,
+            48.6
+          ]
+        },
+        "repeats_disagree": 1
+      }
+    }
+  },
+  "case_level_mcnemar": [
+    {
+      "aggregation": "case: any repeat succeeded",
+      "model_a": "meta/llama-3.1-8b-instruct",
+      "model_b": "nvidia/nemotron-mini-4b-instruct",
+      "n_units": 75,
+      "a_attacked_b_not": 6,
+      "b_attacked_a_not": 27,
+      "p_exact": 0.0003240634687244892,
+      "p_holm": 0.0009721904061734676
+    },
+    {
+      "aggregation": "case: any repeat succeeded",
+      "model_a": "meta/llama-3.1-8b-instruct",
+      "model_b": "openai/gpt-oss-20b",
+      "n_units": 75,
+      "a_attacked_b_not": 3,
+      "b_attacked_a_not": 9,
+      "p_exact": 0.14599609375,
+      "p_holm": 0.14599609375
+    },
+    {
+      "aggregation": "case: any repeat succeeded",
+      "model_a": "nvidia/nemotron-mini-4b-instruct",
+      "model_b": "openai/gpt-oss-20b",
+      "n_units": 75,
+      "a_attacked_b_not": 29,
+      "b_attacked_a_not": 14,
+      "p_exact": 0.03153949735315109,
+      "p_holm": 0.06307899470630218
+    },
+    {
+      "aggregation": "case: both repeats succeeded",
+      "model_a": "meta/llama-3.1-8b-instruct",
+      "model_b": "nvidia/nemotron-mini-4b-instruct",
+      "n_units": 75,
+      "a_attacked_b_not": 5,
+      "b_attacked_a_not": 27,
+      "p_exact": 0.00011307420209050179,
+      "p_holm": 0.00033922260627150536
+    },
+    {
+      "aggregation": "case: both repeats succeeded",
+      "model_a": "meta/llama-3.1-8b-instruct",
+      "model_b": "openai/gpt-oss-20b",
+      "n_units": 75,
+      "a_attacked_b_not": 3,
+      "b_attacked_a_not": 8,
+      "p_exact": 0.2265625,
+      "p_holm": 0.2265625
+    },
+    {
+      "aggregation": "case: both repeats succeeded",
+      "model_a": "nvidia/nemotron-mini-4b-instruct",
+      "model_b": "openai/gpt-oss-20b",
+      "n_units": 75,
+      "a_attacked_b_not": 28,
+      "b_attacked_a_not": 11,
+      "p_exact": 0.009475304279476404,
+      "p_holm": 0.01895060855895281
+    }
+  ],
+  "run_level_mcnemar": [
+    {
+      "aggregation": "run: (case, repetition) pairs",
+      "model_a": "meta/llama-3.1-8b-instruct",
+      "model_b": "nvidia/nemotron-mini-4b-instruct",
+      "n_units": 150,
+      "a_attacked_b_not": 11,
+      "b_attacked_a_not": 54,
+      "p_exact": 6.027539034309404e-08,
+      "p_holm": 1.8082617102928213e-07
+    },
+    {
+      "aggregation": "run: (case, repetition) pairs",
+      "model_a": "meta/llama-3.1-8b-instruct",
+      "model_b": "openai/gpt-oss-20b",
+      "n_units": 150,
+      "a_attacked_b_not": 6,
+      "b_attacked_a_not": 17,
+      "p_exact": 0.03468966484069824,
+      "p_holm": 0.03468966484069824
+    },
+    {
+      "aggregation": "run: (case, repetition) pairs",
+      "model_a": "nvidia/nemotron-mini-4b-instruct",
+      "model_b": "openai/gpt-oss-20b",
+      "n_units": 150,
+      "a_attacked_b_not": 57,
+      "b_attacked_a_not": 25,
+      "p_exact": 0.0005347214913281791,
+      "p_holm": 0.0010694429826563583
+    }
+  ]
+}
